@@ -54,7 +54,7 @@ const simpanContact = (nama, email, noHP) => {
     
     console.log(chalk.green.inverse.bold('Terimakasih sudah memasukkan data.'))
 }
-
+// menampilkan daftar kontak
 const listContact = () => {
     const contacts = loadContact()
     console.log(chalk.blueBright.inverse.bold('Daftar Kontak :'))
@@ -62,7 +62,7 @@ const listContact = () => {
         console.log(`${i+1}. ${contact.nama} - ${contact.noHP}`)
     })
 }
-
+// menampilkan detail kontak
 const detailContact = (nama) => {
     const contacts = loadContact()
     const contact = contacts.find((contact) => contact.nama.toLowerCase() === nama.toLowerCase())
@@ -77,5 +77,22 @@ const detailContact = (nama) => {
         console.log(contact.email)
     }
 }
+// menghapus kontak
+const deleteContact = (nama) => {
+    const contacts = loadContact()
 
-module.exports = {simpanContact, listContact, detailContact}
+    const newContacts = contacts.filter(
+        (contact) => contact.nama.toLowerCase() === nama.toLowerCase()
+    )
+
+    if (contacts.length === newContacts.length) {
+        console.log(chalk.red.inverse.bold(`Nama ${nama} tidak ditemukan`))
+        return false
+    }
+    
+    fs.writeFileSync('data/contacts.json', JSON.stringify(newContacts))
+    
+    console.log(chalk.green.inverse.bold(`Data kontak ${nama} berhasil dihapus`))
+}
+
+module.exports = {simpanContact, listContact, detailContact, deleteContact}
